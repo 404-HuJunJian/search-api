@@ -43,7 +43,15 @@
     select id, ctime, empid, manid, performance, stime, etime, carid
     from performance
   </select>
+
+//lkm
+  <select id="selectAllByCarid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select * from performance where carid=#{carid}
+  </select>
+
+
   <select id="selectAvgByCarid" resultType="Double">
     select avg(performance) from performance where carid = #{carid}
   </select>
 </mapper>
+

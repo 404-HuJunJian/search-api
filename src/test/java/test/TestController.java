@@ -4,6 +4,9 @@ import com.watering.ApiMain8081;
 import com.watering.constant.FileTypeEnum;
 import com.watering.dao.*;
 import com.watering.domain.DTO.ResponseDTO;
+import com.watering.domain.DTO.search.KeyWord;
+import com.watering.domain.VO.*;
+import com.watering.domain.entity.*;
 import com.watering.domain.DTO.employee.EmployeeUpdateBaseDTO;
 import com.watering.domain.DTO.search.KeyWord;
 import com.watering.domain.DTO.search.SearchDTO;
@@ -80,13 +83,15 @@ public class TestController {
         lists.add(scoreEntityMapper.selectAll());
         System.out.println(lists);
     }
-//    @Test
-//    public void test1(){
-//        ManagerEntity managerEntity = new ManagerEntity(null);
-//        ManagerVO managerVO =new ManagerVO(2,new Date(),null,null,null,null,null);
-//        BeanUtils.copyProperties(managerEntity,managerVO);
-//        System.out.println(managerVO);
-//    }
+
+    @Test
+    public void test1(){
+
+    ManagerEntity managerEntity = new ManagerEntity(null);
+    ManagerVO managerVO =new ManagerVO(2,new Date(),null,null,null,null,null);
+        BeanUtils.copyProperties(managerEntity,managerVO);
+        System.out.println(managerVO);
+}
 
     @Test
     public void test2(){
@@ -111,7 +116,6 @@ public class TestController {
         System.out.println(new BCryptPasswordEncoder().encode("zhangdudu"));
     }
 
-    @Test
     public void test5(){
         EmployeeEntity employeeEntity = employeeEntityMapper.selectByPrimaryKey(1);
         String enterpriseName = null;
@@ -216,7 +220,130 @@ public class TestController {
 //        System.out.println(date2.getTime()-date1.getTime());
 //        Double a = Double.valueOf((date2.getTime()-date1.getTime())/(1000*60*60*24*365L));
 //        System.out.println(a);
+
     }
 
+    @Test
+    public void findAvgScore(){
+        float attitude=0,ability=0;
+        AvgScoreVO avgScoreVO = new AvgScoreVO();
+        List<CareerEntity> careerEntities = careerEntityMapper.selectAllByEmpid(2);
+        System.out.println(careerEntities.size());
+        for (CareerEntity careerEntity:careerEntities){
+            attitude+=careerEntity.getAttendance();
+            ability+=careerEntity.getPerformance();
+        }
+        avgScoreVO.setAttitude(attitude/careerEntities.size());
+        avgScoreVO.setAbility(ability/careerEntities.size());
+        System.out.println(avgScoreVO);
+    }
+
+    @Test
+    public void findAllCrime(){
+        List<CrimeVO> list = new ArrayList<>();
+        List<CrimeEntity> crimeEntities=crimeEntityMapper.selectAllByEmpid(2);
+        for (CrimeEntity crimeEntity:crimeEntities){
+            CrimeVO crimeVO = new CrimeVO();
+            BeanUtils.copyProperties(crimeEntity,crimeVO);
+            crimeVO.setManager(managerEntityMapper.selectByPrimaryKey(crimeEntity.getManid()).getName());
+            list.add(crimeVO);
+        }
+        System.out.println(list);
+    }
+
+    @Test
+    public void findCurAttendance(){
+        List<AttendanceVO> list=new ArrayList<>();
+        List<AttendanceEntity> attendanceEntities = mapper.selectAllByCarid(1);
+        for (AttendanceEntity attendanceEntity:attendanceEntities){
+            AttendanceVO attendanceVO = new AttendanceVO();
+            ManagerEntity managerEntity = managerEntityMapper.selectByPrimaryKey(attendanceEntity.getManid());
+            BeanUtils.copyProperties(attendanceEntity,attendanceVO);
+            attendanceVO.setManager(managerEntity.getName());
+            list.add(attendanceVO);
+
+        }
+        System.out.println(list);
+    }
+
+    @Test
+    public void findCurPerformance(){
+        List<PerformanceVO> list=new ArrayList<>();
+        List<PerformanceEntity> performanceEntities= performanceEntityMapper.selectAllByCarid(1);
+        for (PerformanceEntity performanceEntity:performanceEntities){
+            PerformanceVO performanceVO=new PerformanceVO();
+            ManagerEntity managerEntity = managerEntityMapper.selectByPrimaryKey(performanceEntity.getManid());
+            BeanUtils.copyProperties(performanceEntity,performanceVO);
+            performanceVO.setManager(managerEntity.getName());
+            list.add(performanceVO);
+        }
+        System.out.println(list);
+    }
+
+    @Test
+    public void findCurCrime(){
+        List<CrimeVO> list=new ArrayList<>();
+        List<CrimeEntity> crimeEntities=crimeEntityMapper.selectAllByCarid(2);
+        for (CrimeEntity crimeEntity:crimeEntities){
+            CrimeVO crimeVO=new CrimeVO();
+            ManagerEntity managerEntity = managerEntityMapper.selectByPrimaryKey(crimeEntity.getManid());
+            BeanUtils.copyProperties(crimeEntity,crimeVO);
+            crimeVO.setManager(managerEntity.getName());
+            list.add(crimeVO);
+        }
+        System.out.println(list);
+    }
+
+    @Test
+    public void hrSearch(){
+        List<HrVO> list=new ArrayList<>();
+        List<HrEntity> hrEntities = hrEntityMapper.selectAll();
+        for (HrEntity hrEntity:hrEntities){
+            HrVO hrVO = new HrVO();
+            EnterpriseEntity enterpriseEntity = enterpriseEntityMapper.selectByPrimaryKey(hrEntity.getEntid());
+            BeanUtils.copyProperties(hrEntity,hrVO);
+            hrVO.setEnterprise(enterpriseEntity.getName());
+            list.add(hrVO);
+        }
+        System.out.println(list);
+    }
+
+    @Test
+    public void managerSearch() {
+        List<ManagerVO> list = new ArrayList<>();
+        List<ManagerEntity> managerEntities = managerEntityMapper.selectAll();
+        for (ManagerEntity managerEntity : managerEntities) {
+            ManagerVO managerVO = new ManagerVO();
+            EnterpriseEntity enterpriseEntity = enterpriseEntityMapper.selectByPrimaryKey(managerEntity.getEntid());
+            DepartmentEntity departmentEntity = departmentEntityMapper.selectByPrimaryKey(managerEntity.getDepid());
+            BeanUtils.copyProperties(managerEntity, managerVO);
+            managerVO.setEnterprise(enterpriseEntity.getName());
+            managerVO.setDepartment(departmentEntity.getName());
+            list.add(managerVO);
+        }
+        System.out.println(list);
+    }
+    @Test
+    public void departmentSearch(){
+        List<DepartmentEntity> list = departmentEntityMapper.selectAll();
+        System.out.println(list);
+    }
+  
+    @Test
+    public void findAllCareer() {
+        List<CareerEntity> careerEntities = careerEntityMapper.selectAllByEmpid(2);
+        List<CareerVO> list = new ArrayList<>();
+        for (CareerEntity careerEntity : careerEntities) {
+            CareerVO careerVO = new CareerVO();
+            BeanUtils.copyProperties(careerEntity, careerVO);
+            EnterpriseEntity enterpriseEntity = enterpriseEntityMapper.selectByPrimaryKey(careerEntity.getEntid());
+            DepartmentEntity departmentEntity = departmentEntityMapper.selectByPrimaryKey(careerEntity.getDepid());
+            OccupationEntity occupationEntity = occupationEntityMapper.selectByPrimaryKey(careerEntity.getOccid());
+            careerVO.setEnterprise(enterpriseEntity.getName());
+            careerVO.setDepartment(departmentEntity.getName());
+            careerVO.setOccupation(occupationEntity.getName());
+            list.add(careerVO);
+        }
+        System.out.println(list);
 
 }

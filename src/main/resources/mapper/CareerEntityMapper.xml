@@ -49,7 +49,15 @@
     select id, ctime, empid, entid, depid, stime, etime, occid, attendance, performance
     from career
   </select>
+
+
+  //lkm
+  <select id="selectAllByEmpid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select * from career where empid=#{empid}
+  </select>
+
   <select id="selectLastCareerByEmpId" resultMap="BaseResultMap">
     select * from career where empid = #{empid} order by id desc limit 1;
   </select>
 </mapper>
+

@@ -8,8 +8,8 @@ mybatis:
 
 spring:
   datasource:
-    username: 数据库用户名
-    password: 数据库密码
+    username: root
+    password: root
     url: jdbc:mysql://localhost:3306/search?characterEncoding=utf-8&useUnicode=true&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource

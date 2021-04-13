@@ -15,6 +15,10 @@ public interface CrimeEntityMapper {
 
     CrimeEntity selectByPrimaryKey(Integer id);
 
+    List<CrimeEntity> selectAllByEmpid(Integer empid);
+
+    List<CrimeEntity> selectAllByCarid(Integer carid);
+
     List<CrimeEntity> selectAll();
 
     int updateByPrimaryKey(CrimeEntity record);

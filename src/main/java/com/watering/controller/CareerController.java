@@ -8,6 +8,7 @@ import com.watering.domain.DTO.crime.CrimeAddDTO;
 import com.watering.domain.DTO.performance.PerformanceAddDTO;
 import com.watering.domain.DTO.score.ScoreAddDTO;
 import com.watering.domain.VO.*;
+import com.watering.service.impl.CareerServiceImpl;
 import com.watering.service.CareerService;
 import com.watering.service.EmployeeService;
 import com.watering.service.ScoreService;
@@ -32,6 +33,9 @@ import java.util.List;
 public class CareerController {
 
     @Autowired
+    private CareerServiceImpl careerService;
+  
+    @Autowired
     private ScoreService scoreService;
 
     @Autowired
@@ -43,19 +47,19 @@ public class CareerController {
     @ApiOperation("根据empid查询员工所有经历")
     @GetMapping("/employee/{empid}")
     public ResponseDTO<List<CareerVO>> findAllCareer(@PathVariable Integer empid){
-        return ResponseDTO.succData(new ArrayList<CareerVO>());
+        return careerService.findAllCareer(empid);
     }
 
     @ApiOperation("根据empid查询员工全部经历的两项平均分")
     @GetMapping("/avgscore/{empid}")
     public ResponseDTO<AvgScoreVO> findAvgScore(@PathVariable Integer empid){
-        return ResponseDTO.succData(new AvgScoreVO());
+        return careerService.findAvgScore(empid);
     }
 
     @ApiOperation("根据empid查询全部的违纪记录")
     @GetMapping("/crime/{empid}")
     public ResponseDTO<List<CrimeVO>> findAllCrime(@PathVariable Integer empid){
-        return ResponseDTO.succData(new ArrayList<CrimeVO>());
+        return careerService.findAllCrime(empid);
     }
 
     @ApiOperation("根据carid查询该次经历信息")
@@ -66,14 +70,15 @@ public class CareerController {
 
     @ApiOperation("根据carid查询该经历考勤记录")
     @GetMapping("/attendance/{carid}")
+
     public ResponseDTO<List<AttendanceVO>> findCurAttendance(@PathVariable Integer carid){
-        return ResponseDTO.succData(new ArrayList<AttendanceVO>());
+        return careerService.findCurAttendance(carid);
     }
 
     @ApiOperation("根据carid查询该经历绩效记录")
     @GetMapping("/performance/{carid}")
     public ResponseDTO<List<PerformanceVO>> findCurPerformance(@PathVariable Integer carid){
-        return ResponseDTO.succData(new ArrayList<PerformanceVO>());
+         return careerService.findCurPerformance(carid);
     }
 
     @ApiOperation("根据carid查询该经历违纪记录")
